@@ -74,7 +74,9 @@ fun SearchColumn(
     onHideKeyboard: () -> Unit = {},
 ) {
 
-    val columns = LocalGridSettings.current.columnCount
+    val windowWidthDp = with(androidx.compose.ui.platform.LocalDensity.current) { de.mm20.launcher2.ui.locals.LocalWindowSize.current.width.toDp() }
+    val windowWidthClass = de.mm20.launcher2.ui.ktx.getWindowWidthSizeClass(windowWidthDp)
+    val columns = de.mm20.launcher2.ui.ktx.scaledGridColumnCount(LocalGridSettings.current.columnCount, windowWidthClass)
     val showList = LocalGridSettings.current.showList
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

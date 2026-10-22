@@ -52,7 +52,10 @@ fun LazyListScope.SearchFavorites(
                 verticalArrangement = if (reverse) Arrangement.BottomReversed else Arrangement.Top
             ) {
                 if (favorites.isNotEmpty()) {
-                    SearchResultGrid(favorites, transitionKey = selectedTag, reverse = reverse)
+                    val windowWidthDp = with(androidx.compose.ui.platform.LocalDensity.current) { de.mm20.launcher2.ui.locals.LocalWindowSize.current.width.toDp() }
+                    val windowWidthClass = de.mm20.launcher2.ui.ktx.getWindowWidthSizeClass(windowWidthDp)
+                    val columns = de.mm20.launcher2.ui.ktx.scaledGridColumnCount(de.mm20.launcher2.ui.locals.LocalGridSettings.current.columnCount, windowWidthClass)
+                    SearchResultGrid(favorites, transitionKey = selectedTag, reverse = reverse, columns = columns)
                 } else {
                     Banner(
                         modifier = Modifier.padding(16.dp),

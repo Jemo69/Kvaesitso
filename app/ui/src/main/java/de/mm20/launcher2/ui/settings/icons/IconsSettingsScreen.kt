@@ -279,12 +279,17 @@ fun IconsSettingsScreen() {
         }
     }
 
-    val iconPackPreviewIcons = remember(installedIconPacks, iconSize) {
+    val sheetWindowSize = de.mm20.launcher2.ui.locals.LocalWindowSize.current
+    val sheetWindowWidthDp = with(androidx.compose.ui.platform.LocalDensity.current) { sheetWindowSize.width.toDp() }
+    val sheetWindowWidthClass = de.mm20.launcher2.ui.ktx.getWindowWidthSizeClass(sheetWindowWidthDp)
+    val sheetColumns = de.mm20.launcher2.ui.ktx.scaledGridColumnCount(grid.columnCount, sheetWindowWidthClass)
+
+    val iconPackPreviewIcons = remember(installedIconPacks, iconSize, sheetColumns) {
         installedIconPacks.associate {
             it.packageName to viewModel.getIconPackPreviewIcons(
                 context,
                 it,
-                grid.columnCount,
+                sheetColumns,
                 iconSize,
                 icons?.themedIcons == true
             )
@@ -295,7 +300,7 @@ fun IconsSettingsScreen() {
         expanded = showIconPackSheet,
         installedIconPacks,
         iconPackPreviewIcons = iconPackPreviewIcons,
-        columns = grid.columnCount,
+        columns = sheetColumns,
         onSelect = {
             viewModel.setIconPack(it.packageName)
             showIconPackSheet = false

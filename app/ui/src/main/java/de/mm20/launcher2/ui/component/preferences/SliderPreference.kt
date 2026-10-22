@@ -24,6 +24,8 @@ import kotlin.math.roundToInt
 @Composable
 fun SliderPreference(
     title: String,
+    summary: String? = null,
+    content: (@Composable () -> Unit)? = null,
     @DrawableRes icon: Int? = null,
     iconPadding: Boolean = icon != null,
     value: Float,
@@ -75,6 +77,14 @@ fun SliderPreference(
                 text = title,
                 style = MaterialTheme.typography.titleMedium
             )
+            if (summary != null) {
+                Text(
+                    modifier = Modifier.padding(start = 2.dp, top = 2.dp),
+                    text = summary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -104,6 +114,9 @@ fun SliderPreference(
                     )
                 }
             }
+            if (content != null) {
+                content()
+            }
         }
     }
 }
@@ -111,6 +124,8 @@ fun SliderPreference(
 @Composable
 fun SliderPreference(
     title: String,
+    summary: String? = null,
+    content: (@Composable () -> Unit)? = null,
     @DrawableRes icon: Int? = null,
     value: Int,
     min: Int = 0,
@@ -122,6 +137,8 @@ fun SliderPreference(
 ) {
     SliderPreference(
         title = title,
+        summary = summary,
+        content = content,
         icon = icon,
         value = value.toFloat(),
         enabled = enabled,
@@ -140,6 +157,8 @@ fun SliderPreference(
 @Composable
 inline fun <reified T: Enum<T>> SliderPreference(
     title: String,
+    summary: String? = null,
+    noinline content: (@Composable () -> Unit)? = null,
     @DrawableRes icon: Int? = null,
     value: T,
     enabled: Boolean = true,
@@ -149,6 +168,8 @@ inline fun <reified T: Enum<T>> SliderPreference(
     val values = labels?.map { it.value }?.toTypedArray() ?: enumValues()
     SliderPreference(
         title = title,
+        summary = summary,
+        content = content,
         icon = icon,
         value = values.indexOf(value),
         min = 0,
